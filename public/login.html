@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authorization</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #121212;
+        color: #ffffff;
+        margin: 0;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      .login-form {
+        background: #1e1e1e;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        width: 300px;
+        height: 225px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.5s ease, box-shadow 0.5s ease;
+      }
+      .login-form input {
+        width: 290px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #444;
+        border-radius: 5px;
+        background-color: #333;
+        color: #ffffff;
+        transition: background-color 0.5s ease, border-color 0.5s ease,
+          color 0.5s ease;
+      }
+      .login-form button {
+        width: 100px;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s ease;
+      }
+      .login-form button:hover {
+        background-color: #218838;
+      }
+      #theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #444;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.5s ease;
+      }
+      #theme-toggle img {
+        width: 24px;
+        height: 24px;
+        transition: opacity 0.5s ease;
+        position: absolute;
+      }
+      #theme-toggle:hover {
+        background-color: #555;
+      }
+
+      body.light-theme {
+        background-color: #f1f1f1;
+        color: #000000;
+      }
+      body.light-theme .login-form {
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+      body.light-theme .login-form input {
+        border: 1px solid #ddd;
+        background-color: white;
+        color: #000000;
+      }
+      body.light-theme #theme-toggle {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <body class="dark-theme">
+    <button id="theme-toggle">
+      <img src="sun.png" class="icons" alt="Sun" id="sun-icon" />
+      <img
+        src="moon.png"
+        class="icons"
+        alt="Moon"
+        id="moon-icon"
+        style="opacity: 0"
+      />
+    </button>
+
+    <div class="login-form">
+      <h2>Авторизация</h2>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Логин" required />
+        <input type="password" id="password" placeholder="Пароль" required />
+        <button type="submit">Войти</button>
+      </form>
+    </div>
+
+    <script>
+      const themeToggle = document.getElementById("theme-toggle");
+      const body = document.body;
+      const moonIcon = document.getElementById("moon-icon");
+      const sunIcon = document.getElementById("sun-icon");
+
+      body.style.transition = "none";
+
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      setTheme(savedTheme);
+
+      setTimeout(() => {
+        body.style.transition = "";
+      }, 10);
+
+      function setTheme(theme) {
+        if (theme === "light") {
+          body.classList.add("light-theme");
+          body.classList.remove("dark-theme");
+          moonIcon.style.opacity = "1";
+          sunIcon.style.opacity = "0";
+        } else {
+          body.classList.add("dark-theme");
+          body.classList.remove("light-theme");
+          moonIcon.style.opacity = "0";
+          sunIcon.style.opacity = "1";
+        }
+      }
+
+      function toggleTheme() {
+        const newTheme = body.classList.contains("light-theme")
+          ? "dark"
+          : "light";
+        localStorage.setItem("theme", newTheme);
+        setTheme(newTheme);
+      }
+
+      themeToggle.addEventListener("click", toggleTheme);
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          });
+
+          if (response.redirected) {
+            window.location.href = response.url;
+          } else {
+            alert("Invalid username or password");
+          }
+        });
+    </script>
+  </body>
+</html>
