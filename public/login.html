@@ -111,6 +111,18 @@
         width: 40px;
         height: 30px;
       }
+      #logpas {
+        width: 150px;
+        margin-left: 57px;
+        padding: 7px;
+        background-color: #8f8d8a;
+        color: back;
+        font-size: 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s ease;
+      }
     </style>
   </head>
   <body class="dark-theme">
@@ -136,8 +148,10 @@
           </button>
         </div>
         <button id="submit" type="submit">Войти</button>
+        <button id="logpas" type="submit">Логин, пароль</button>
       </form>
     </div>
+    <div class="hint"></div>
 
     <script>
       const themeToggle = document.getElementById("theme-toggle");
@@ -147,6 +161,11 @@
       const passwordInput = document.getElementById("password");
       const togglePasswordButton = document.getElementById("toggle-password");
       const eyeIcon = document.getElementById("eye-icon");
+      const hint = document.getElementById("logpas");
+
+      logpas.addEventListener("click", () => {
+        alert("Admin: admin 1234\nEmployee: sotr 4321\nUser: user user");
+      });
 
       togglePasswordButton.addEventListener("click", () => {
         if (passwordInput.type === "password") {
