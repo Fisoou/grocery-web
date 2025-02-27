@@ -1,0 +1,110 @@
+:root {
+  --light-gray: #dfdfe2;
+  --dark-blue: #121212;
+  --light-bg: #f1f1f1;
+  --dark-bg: #121212;
+  --light-text: #000000;
+  --dark-text: #ffffff;
+  --light-table-bg: #ffffff;
+  --dark-table-bg: #1e1e1e;
+  --light-table-border: #ddd;
+  --dark-table-border: #444;
+  --dark-button-bg: #28a745;
+  --dark-button-hover: #218838;
+  --light-logout-bg: #dc3545;
+  --dark-logout-bg: #dc3545;
+  --light-logout-hover: #c82333;
+  --dark-logout-hover: #c82333;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+body.light-theme {
+  background-color: var(--light-bg);
+  color: var(--light-text);
+}
+
+h1 {
+  color: var(--dark-text);
+  transition: color 0.5s ease;
+}
+
+body.light-theme h1 {
+  color: var(--light-text);
+}
+#logout-btn {
+  margin: 0;
+
+  background-color: var(--dark-logout-bg);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+body.light-theme #logout-btn {
+  background-color: var(--light-logout-bg);
+}
+
+#logout-btn:hover {
+  background-color: var(--dark-logout-hover);
+}
+
+body.light-theme #logout-btn:hover {
+  background-color: var(--light-logout-hover);
+}
+.actions {
+  font-size: 17px;
+  width: 125px;
+  height: 40px;
+  margin: 20px 0;
+  background-color: var(--dark-button-bg);
+  color: white;
+  border: 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+body.light-theme button {
+  border-color: black;
+}
+
+body.dark-theme button {
+  border-color: white;
+}
+
+#theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #444;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
+}
+
+#theme-toggle img {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.5s ease;
+  position: absolute;
+}
+
+#theme-toggle:hover {
+  background-color: #555;
+}
+
+body.light-theme #theme-toggle {
+  background-color: #ddd;
+}

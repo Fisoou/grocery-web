@@ -1,0 +1,156 @@
+:root {
+  --light-gray: #dfdfe2;
+  --dark-blue: #121212;
+  --light-bg: #f1f1f1;
+  --dark-bg: #121212;
+  --light-text: #000000;
+  --dark-text: #ffffff;
+  --light-table-bg: #ffffff;
+  --dark-table-bg: #1e1e1e;
+  --light-table-border: #ddd;
+  --dark-table-border: #444;
+  --dark-button-bg: #28a745;
+  --dark-button-hover: #218838;
+  --logout-bg: #dc3545;
+  --logout-hover: #c82333;
+  --back-bg: #5474a5;
+  --back-hover: #4d6b96;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+body.light-theme {
+  background-color: var(--light-bg);
+  color: var(--light-text);
+}
+
+h1 {
+  color: var(--dark-text);
+  transition: color 0.5s ease;
+}
+
+body.light-theme h1 {
+  color: var(--light-text);
+}
+
+table {
+  width: 75%;
+  border-collapse: collapse;
+  background-color: var(--dark-table-bg);
+  transition: background-color 0.5s ease;
+}
+
+body.light-theme table {
+  background-color: var(--light-table-bg);
+}
+
+th,
+td {
+  border: 2px solid var(--dark-table-border);
+  padding: 5px;
+  background-color: var(--dark-table-bg);
+  color: var(--dark-text);
+  transition: background-color 0.5s ease, border-color 0.5s ease,
+    color 0.5s ease;
+}
+
+body.light-theme th,
+body.light-theme td {
+  border: 2px solid var(--light-table-border);
+  background-color: var(--light-table-bg);
+  color: var(--light-text);
+}
+
+th {
+  background-color: #868686;
+}
+
+.actions {
+  font-size: 17px;
+  width: 125px;
+  height: 40px;
+  margin: 20px 0;
+  background-color: var(--dark-button-bg);
+  color: white;
+  border: 2px solid;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+body.light-theme button {
+  border-color: black;
+}
+
+body.dark-theme button {
+  border-color: white;
+}
+
+.actions:hover {
+  background-color: var(--dark-button-hover);
+}
+
+#logout-btn {
+  margin: 0;
+  background-color: var(--logout-bg);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#logout-btn:hover {
+  background-color: var(--logout-hover);
+}
+
+#back-btn {
+  margin: 0;
+  background-color: var(--back-bg);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#back-btn:hover {
+  background-color: var(--back-hover);
+}
+
+.buttons {
+  width: 525px;
+  height: 130px;
+}
+
+#theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #444;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
+}
+
+#theme-toggle img {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.5s ease;
+  position: absolute;
+}
+
+#theme-toggle:hover {
+  background-color: #555;
+}
+
+body.light-theme #theme-toggle {
+  background-color: #ddd;
+}

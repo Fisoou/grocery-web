@@ -1,0 +1,118 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+.login-form {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  width: 400px;
+  height: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+.login-form input {
+  width: 290px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #333;
+  color: #ffffff;
+  transition: background-color 0.5s ease, border-color 0.5s ease,
+    color 0.5s ease;
+}
+.login-form #submit {
+  width: 100px;
+  padding: 7px;
+  background-color: #e09017;
+  color: back;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+.login-form #submit:hover {
+  background-color: #a56b13;
+}
+#theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #444;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
+}
+#theme-toggle img {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.5s ease;
+  position: absolute;
+}
+#theme-toggle:hover {
+  background-color: #555;
+}
+
+body.light-theme {
+  background-color: #f1f1f1;
+  color: #000000;
+}
+body.light-theme .login-form {
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+body.light-theme .login-form input {
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #000000;
+}
+body.light-theme #theme-toggle {
+  background-color: #ddd;
+}
+.password-container {
+  position: relative;
+  width: 100%;
+}
+.toggle-password {
+  position: absolute;
+  top: 0;
+  right: -56px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.toggle-password img {
+  width: 40px;
+  height: 30px;
+}
+#logpas {
+  width: 150px;
+  margin-left: 57px;
+  padding: 7px;
+  background-color: #8f8d8a;
+  color: back;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
