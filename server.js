@@ -6,7 +6,6 @@ const session = require("express-session");
 const app = express();
 const port = 3000;
 
-// PostgreSQL connection configuration
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
@@ -15,36 +14,37 @@ const pool = new Pool({
   port: 5432,
 });
 
-// Session middleware
 app.use(
   session({
-    secret: "bebe", // Change this to a secure key
+    secret: "bebe",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set to true if using HTTPS
+    cookie: { secure: false },
   })
 );
 
-// Middleware to parse JSON and URL-encoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (HTML, CSS, JS)
 app.use(express.static("public"));
 
-// Login endpoint
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
     const { rows } = await pool.query(
-      "SELECT * FROM users WHERE username = $1 AND password = $2",
+      "SELECT username, role FROM users WHERE username = $1 AND password = $2",
       [username, password]
     );
 
     if (rows.length > 0) {
-      req.session.user = rows[0]; // Store user in session
-      res.redirect("/table.html"); // Redirect to the table page
+      req.session.user = rows[0];
+
+      if (rows[0].role === "user") {
+        return res.json({ redirect: "/shop.html" });
+      } else {
+        return res.json({ redirect: "/main.html", role: rows[0].role });
+      }
     } else {
       res.status(401).send("Неверный логин или пароль");
     }
@@ -54,25 +54,19 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Logout endpoint
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).send("Не удалось выйти");
     }
-    res.redirect("/"); // Redirect to the login page
+    res.redirect("/");
   });
 });
 
-// Middleware to protect the table page
-app.use("/table.html", (req, res, next) => {
-  if (!req.session.user) {
-    return res.redirect("/"); // Redirect to login if not authenticated
-  }
-  next();
+app.get("/back", (req, res) => {
+  res.redirect("/main.html");
 });
 
-// API endpoint to fetch products (protected)
 app.get("/api/products", async (req, res) => {
   if (!req.session.user) {
     return res.status(401).send("Вы не авторизованы");
@@ -87,6 +81,76 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+app.get("/api/sales", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  try {
+    const { rows } = await pool.query("SELECT * FROM sales_view");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Ошибка сервера");
+  }
+});
+
+app.get("/api/suppliers", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  try {
+    const { rows } = await pool.query("SELECT * FROM suppliers");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Ошибка сервера");
+  }
+});
+
+app.get("/api/audit", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  try {
+    const { rows } = await pool.query("SELECT * FROM inventory_audit_view");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Ошибка сервера");
+  }
+});
+
+app.get("/api/users", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  try {
+    const { rows } = await pool.query("SELECT * FROM users");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Ошибка сервера");
+  }
+});
+
+app.get("/api/employees", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  try {
+    const { rows } = await pool.query("SELECT * FROM employees");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Ошибка сервера");
+  }
+});
+
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Сервер запущен на: http://localhost:${port}`);
 });

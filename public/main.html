@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tables</title>
+    <style>
+      :root {
+        --light-gray: #dfdfe2;
+        --dark-blue: #121212;
+        --light-bg: #f1f1f1;
+        --dark-bg: #121212;
+        --light-text: #000000;
+        --dark-text: #ffffff;
+        --button-bg: #28a745;
+        --button-hover: #218838;
+        --logout-bg: #dc3545;
+        --logout-hover: #c82333;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--dark-text);
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+
+      body.light-theme {
+        background-color: var(--light-bg);
+        color: var(--light-text);
+      }
+
+      h1 {
+        color: var(--dark-text);
+        transition: color 0.5s ease;
+      }
+
+      body.light-theme h1 {
+        color: var(--light-text);
+      }
+
+      #logout-btn {
+        margin: 0;
+        background-color: var(--logout-bg);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #logout-btn:hover {
+        background-color: var(--logout-hover);
+      }
+
+      #theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #444;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.5s ease;
+      }
+
+      #theme-toggle img {
+        width: 24px;
+        height: 24px;
+        transition: opacity 0.5s ease;
+        position: absolute;
+      }
+
+      #theme-toggle:hover {
+        background-color: #555;
+      }
+
+      body.light-theme #theme-toggle {
+        background-color: #ddd;
+      }
+
+      .buttons button {
+        font-size: 17px;
+        width: 140px;
+        height: 40px;
+        margin: 20px 0;
+        color: white;
+        border: 2px solid;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s ease;
+      }
+
+      body.light-theme button {
+        border-color: black;
+      }
+
+      body.dark-theme button {
+        border-color: white;
+      }
+
+      .buttons button {
+        background-color: var(--button-bg);
+      }
+
+      .buttons button:hover {
+        background-color: var(--button-hover);
+      }
+    </style>
+  </head>
+  <body class="dark-theme">
+    <button id="theme-toggle">
+      <img src="icons/sun.png" class="icons" alt="Sun" id="sun-icon" />
+      <img
+        src="icons/moon.png"
+        class="icons"
+        alt="Moon"
+        id="moon-icon"
+        style="opacity: 0"
+      />
+    </button>
+    <h1>Таблицы</h1>
+    <div class="buttons">
+      <div class="actions">
+        <button
+          class="employee-only"
+          onclick="window.location.href='products.html'"
+        >
+          Продукты
+        </button>
+        <button
+          class="employee-only"
+          onclick="window.location.href='sales.html'"
+        >
+          Продажи
+        </button>
+        <button
+          class="employee-only"
+          onclick="window.location.href='inventory-audit.html'"
+        >
+          Журнал аудита
+        </button>
+        <button class="admin-only" onclick="window.location.href='users.html'">
+          Пользователи
+        </button>
+        <button
+          class="admin-only"
+          onclick="window.location.href='suppliers.html'"
+        >
+          Поставщики
+        </button>
+        <button
+          class="admin-only"
+          onclick="window.location.href='employees.html'"
+        >
+          Сотрудники
+        </button>
+      </div>
+      <button id="logout-btn" class="actions" onclick="logout()">Выйти</button>
+    </div>
+  </body>
+  <script>
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+    const moonIcon = document.getElementById("moon-icon");
+    const sunIcon = document.getElementById("sun-icon");
+
+    body.style.transition = "none";
+
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    setTheme(savedTheme);
+
+    setTimeout(() => {
+      body.style.transition = "";
+    }, 10);
+
+    function setTheme(theme) {
+      if (theme === "light") {
+        body.classList.add("light-theme");
+        body.classList.remove("dark-theme");
+        moonIcon.style.opacity = "1";
+        sunIcon.style.opacity = "0";
+      } else {
+        body.classList.add("dark-theme");
+        body.classList.remove("light-theme");
+        moonIcon.style.opacity = "0";
+        sunIcon.style.opacity = "1";
+      }
+    }
+
+    function toggleTheme() {
+      const newTheme = body.classList.contains("light-theme")
+        ? "dark"
+        : "light";
+      localStorage.setItem("theme", newTheme);
+      setTheme(newTheme);
+    }
+
+    themeToggle.addEventListener("click", toggleTheme);
+
+    function logout() {
+      fetch("/logout", { method: "GET" }).then(() => {
+        window.location.href = "/login.html";
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const role = localStorage.getItem("role");
+
+      if (!role) {
+        window.location.href = "/";
+        return;
+      }
+
+      const employeeButtons = document.querySelectorAll(".employee-only");
+      const adminButtons = document.querySelectorAll(".admin-only");
+
+      if (role === "employee") {
+        adminButtons.forEach((btn) => (btn.style.display = "none"));
+      } else if (role === "admin") {
+      } else {
+        window.location.href = "/shop.html";
+      }
+    });
+  </script>
+</html>

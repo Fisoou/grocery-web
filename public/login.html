@@ -21,7 +21,7 @@
         padding: 20px;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        width: 300px;
+        width: 400px;
         height: 225px;
         display: flex;
         flex-direction: column;
@@ -40,18 +40,19 @@
         transition: background-color 0.5s ease, border-color 0.5s ease,
           color 0.5s ease;
       }
-      .login-form button {
+      .login-form #submit {
         width: 100px;
-        padding: 10px;
-        background-color: #28a745;
-        color: white;
+        padding: 7px;
+        background-color: #e09017;
+        color: back;
+        font-size: 18px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.5s ease;
       }
-      .login-form button:hover {
-        background-color: #218838;
+      .login-form #submit:hover {
+        background-color: #a56b13;
       }
       #theme-toggle {
         position: absolute;
@@ -94,13 +95,29 @@
       body.light-theme #theme-toggle {
         background-color: #ddd;
       }
+      .password-container {
+        position: relative;
+        width: 100%;
+      }
+      .toggle-password {
+        position: absolute;
+        top: 0;
+        right: -56px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .toggle-password img {
+        width: 40px;
+        height: 30px;
+      }
     </style>
   </head>
   <body class="dark-theme">
     <button id="theme-toggle">
-      <img src="sun.png" class="icons" alt="Sun" id="sun-icon" />
+      <img src="icons/sun.png" class="icons" alt="Sun" id="sun-icon" />
       <img
-        src="moon.png"
+        src="icons/moon.png"
         class="icons"
         alt="Moon"
         id="moon-icon"
@@ -112,8 +129,13 @@
       <h2>Авторизация</h2>
       <form id="login-form">
         <input type="text" id="username" placeholder="Логин" required />
-        <input type="password" id="password" placeholder="Пароль" required />
-        <button type="submit">Войти</button>
+        <div class="password-container">
+          <input type="password" id="password" placeholder="Пароль" required />
+          <button type="button" id="toggle-password" class="toggle-password">
+            <img src="icons/eye_open.png" alt="Show Password" id="eye-icon" />
+          </button>
+        </div>
+        <button id="submit" type="submit">Войти</button>
       </form>
     </div>
 
@@ -122,6 +144,25 @@
       const body = document.body;
       const moonIcon = document.getElementById("moon-icon");
       const sunIcon = document.getElementById("sun-icon");
+      const passwordInput = document.getElementById("password");
+      const togglePasswordButton = document.getElementById("toggle-password");
+      const eyeIcon = document.getElementById("eye-icon");
+
+      togglePasswordButton.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+
+          eyeIcon.src = body.classList.contains("light-theme")
+            ? "icons/eye_closed_dark.png"
+            : "icons/eye_closed_light.png";
+        } else {
+          passwordInput.type = "password";
+
+          eyeIcon.src = body.classList.contains("light-theme")
+            ? "icons/eye_open_dark.png"
+            : "icons/eye_open_light.png";
+        }
+      });
 
       body.style.transition = "none";
 
@@ -138,11 +179,23 @@
           body.classList.remove("dark-theme");
           moonIcon.style.opacity = "1";
           sunIcon.style.opacity = "0";
+
+          if (passwordInput.type === "password") {
+            eyeIcon.src = "icons/eye_open_dark.png";
+          } else {
+            eyeIcon.src = "icons/eye_closed_dark.png";
+          }
         } else {
           body.classList.add("dark-theme");
           body.classList.remove("light-theme");
           moonIcon.style.opacity = "0";
           sunIcon.style.opacity = "1";
+
+          if (passwordInput.type === "password") {
+            eyeIcon.src = "icons/eye_open_light.png";
+          } else {
+            eyeIcon.src = "icons/eye_closed_light.png";
+          }
         }
       }
 
@@ -172,10 +225,14 @@
             body: JSON.stringify({ username, password }),
           });
 
-          if (response.redirected) {
-            window.location.href = response.url;
+          if (response.ok) {
+            const data = await response.json();
+            if (data.redirect) {
+              localStorage.setItem("role", data.role || "user");
+              window.location.href = data.redirect;
+            }
           } else {
-            alert("Invalid username or password");
+            alert("Неверный логин или пароль");
           }
         });
     </script>
