@@ -3,7 +3,237 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/products.css" />
+    <style>
+      :root {
+        --light-gray: #dfdfe2;
+        --light-bg: #f1f1f1;
+        --dark-bg: #121212;
+        --light-text: #000000;
+        --dark-text: #ffffff;
+        --light-table-bg: #ffffff;
+        --dark-table-bg: #1e1e1e;
+        --light-table-border: #ddd;
+        --dark-table-border: #444;
+        --button-bg: #28a745;
+        --button-hover: #218838;
+        --logout-bg: #dc3545;
+        --logout-hover: #c82333;
+        --back-bg: #5474a5;
+        --back-hover: #4d6b96;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--dark-text);
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+
+      body.light-theme {
+        background-color: var(--light-bg);
+        color: var(--light-text);
+      }
+
+      h1 {
+        color: var(--dark-text);
+        transition: color 0.5s ease;
+      }
+
+      body.light-theme h1 {
+        color: var(--light-text);
+      }
+
+      table {
+        width: 75%;
+        border-collapse: collapse;
+        background-color: var(--dark-table-bg);
+        transition: background-color 0.5s ease;
+      }
+
+      body.light-theme table {
+        background-color: var(--light-table-bg);
+      }
+
+      th,
+      td {
+        border: 2px solid var(--dark-table-border);
+        padding: 5px;
+        background-color: var(--dark-table-bg);
+        color: var(--dark-text);
+        transition: background-color 0.5s ease, border-color 0.5s ease,
+          color 0.5s ease;
+      }
+
+      body.light-theme th,
+      body.light-theme td {
+        border: 2px solid var(--light-table-border);
+        background-color: var(--light-table-bg);
+        color: var(--light-text);
+      }
+
+      th {
+        background-color: #868686;
+      }
+
+      .actions {
+        width: 155px;
+        height: 40px;
+        margin: 20px 0;
+        background-color: var(--button-bg);
+        font-size: 17px;
+        color: white;
+        border: 2px solid;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s ease;
+      }
+
+      body.light-theme button {
+        border-color: black;
+      }
+
+      body.dark-theme button {
+        border-color: white;
+      }
+
+      .actions:hover {
+        background-color: var(--button-hover);
+      }
+
+      #logout-btn {
+        margin: 0;
+        background-color: var(--logout-bg);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #logout-btn:hover {
+        background-color: var(--logout-hover);
+      }
+
+      #back-btn {
+        margin: 0;
+        background-color: var(--back-bg);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #back-btn:hover {
+        background-color: var(--back-hover);
+      }
+
+      .buttons {
+        width: 525px;
+        height: 130px;
+      }
+
+      #theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #444;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.5s ease;
+      }
+
+      #theme-toggle img {
+        width: 24px;
+        height: 24px;
+        transition: opacity 0.5s ease;
+        position: absolute;
+      }
+
+      #theme-toggle:hover {
+        background-color: #555;
+      }
+
+      body.light-theme #theme-toggle {
+        background-color: #ddd;
+      }
+
+      #product-form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin: 20px;
+      }
+
+      #product-form label {
+        margin: 5px 0;
+      }
+
+      #product-form input {
+        margin-bottom: 10px;
+        padding: 5px;
+      }
+
+      #product-form button:hover {
+        background-color: var(--button-hover);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        margin: 20px;
+        width: 300px;
+      }
+
+      form label {
+        margin-bottom: 5px;
+      }
+
+      form input {
+        margin-bottom: 10px;
+        padding: 5px;
+      }
+
+      #add-product-btn {
+        width: 155px;
+        height: 40px;
+        margin: 20px 0;
+        background-color: var(--button-bg);
+        font-size: 17px;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s ease;
+      }
+
+      #delete-btn {
+        background-color: var(--logout-bg);
+      }
+
+      #delete-btn:hover {
+        background-color: var(--logout-hover);
+      }
+
+      #search-btn:hover {
+        background-color: var(--button-hover);
+      }
+
+      .interactions {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .section {
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        margin-left: 20px;
+        margin-bottom: 10px;
+      }
+    </style>
     <title>Products Table</title>
   </head>
   <body class="dark-theme">
@@ -32,20 +262,267 @@
       </thead>
       <tbody></tbody>
     </table>
-    <div class="buttons">
-      <button id="add-btn" class="actions" onclick="addBtn()">Добавить</button>
-      <button id="delete-btn" class="actions" onclick="deleteBtn()">
-        Удалить
-      </button>
-      <button id="refresh-btn" class="actions" onclick="refreshBtn()">
-        Обновить
-      </button>
-      <button id="search-btn" class="actions" onclick="searchBtn()">
-        Поиск
-      </button>
-      <button id="logout-btn" class="actions" onclick="logout()">Выйти</button>
-      <button id="back-btn" class="actions" onclick="back()">Назад</button>
+
+    <div class="interactions">
+      <div class="section">
+        <h2>Добавить продукт</h2>
+        <form id="product-form">
+          <label for="name">Название:</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="category">Категория:</label>
+          <input type="text" id="category" name="category" required />
+
+          <label for="price">Цена:</label>
+          <input type="number" id="price" name="price" required />
+
+          <label for="stock_quantity">Количество:</label>
+          <input
+            type="number"
+            id="stock_quantity"
+            name="stock_quantity"
+            required
+          />
+
+          <label for="supplier_name">Поставщик:</label>
+          <input type="text" id="supplier_name" name="supplier_name" required />
+
+          <label for="last_restocked_date">Дата последней поставки:</label>
+          <input
+            type="date"
+            id="last_restocked_date"
+            name="last_restocked_date"
+            required
+          />
+          <button class="actions" type="submit" id="add-product-btn">
+            Добавить продукт
+          </button>
+        </form>
+      </div>
+
+      <div class="section">
+        <h2>Удалить продукт</h2>
+        <form id="delete-form">
+          <label for="delete-name">Название продукта для удаления:</label>
+          <input type="text" id="delete-name" name="delete-name" required />
+          <button type="submit" class="actions" id="delete-btn">
+            Удалить продукт
+          </button>
+        </form>
+      </div>
+
+      <div class="section">
+        <h2>Поиск продукта</h2>
+        <form id="search-form">
+          <label for="search-name">Название продукта для поиска:</label>
+          <input type="text" id="search-name" name="search-name" />
+          <button type="submit" class="actions" id="search-btn">Поиск</button>
+        </form>
+      </div>
+
+      <div class="buttons">
+        <button id="refresh-btn" class="actions" onclick="fetchProducts()">
+          Обновить
+        </button>
+        <button id="logout-btn" class="actions" onclick="logout()">
+          Выйти
+        </button>
+        <button id="back-btn" class="actions" onclick="back()">Назад</button>
+      </div>
     </div>
-    <script src="js/products.js"></script>
+    <script>
+      document
+        .querySelector("#delete-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const deleteName = document.querySelector("#delete-name").value;
+          try {
+            const response = await fetch("/api/products/delete", {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name: deleteName }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+              alert("Продукт удален!");
+              fetchProducts();
+            } else {
+              alert(result.message || "Ошибка при удалении продукта");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Ошибка при удалении продукта");
+          }
+        });
+
+      document
+        .querySelector("#search-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const searchName = document
+            .querySelector("#search-name")
+            .value.toLowerCase();
+
+          try {
+            const response = await fetch("/api/products");
+            const products = await response.json();
+
+            const filteredProducts = products.filter((product) =>
+              product.name.toLowerCase().includes(searchName)
+            );
+
+            const tbody = document.querySelector("#products-table tbody");
+            tbody.innerHTML = filteredProducts
+              .map(
+                (product) => `
+          <tr>
+            <td>${product.name}</td>
+            <td>${product.category}</td>
+            <td>${product.price}</td>
+            <td>${product.stock_quantity}</td>
+            <td>${product.supplier_name}</td>
+            <td>${formatDate(product.last_restocked_date)}</td>
+          </tr>
+        `
+              )
+              .join("");
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Ошибка при поиске продукта");
+          }
+        });
+
+      document
+        .querySelector("#product-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const name = document.querySelector("#name").value;
+          const category = document.querySelector("#category").value;
+          const price = document.querySelector("#price").value;
+          const stock_quantity =
+            document.querySelector("#stock_quantity").value;
+          const supplier_name = document.querySelector("#supplier_name").value;
+          const last_restocked_date = document.querySelector(
+            "#last_restocked_date"
+          ).value;
+
+          const newProduct = {
+            name,
+            category,
+            price,
+            stock_quantity,
+            supplier_name,
+            last_restocked_date,
+          };
+
+          try {
+            const response = await fetch("/api/products", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newProduct),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+              alert("Продукт добавлен!");
+              fetchProducts();
+            } else {
+              alert(result.message || "Ошибка при добавлении продукта");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Ошибка при добавлении продукта");
+          }
+        });
+
+      const themeToggle = document.getElementById("theme-toggle");
+      const body = document.body;
+      const moonIcon = document.getElementById("moon-icon");
+      const sunIcon = document.getElementById("sun-icon");
+
+      body.style.transition = "none";
+
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      setTheme(savedTheme);
+
+      setTimeout(() => {
+        body.style.transition = "";
+      }, 10);
+
+      function setTheme(theme) {
+        if (theme === "light") {
+          body.classList.add("light-theme");
+          body.classList.remove("dark-theme");
+          moonIcon.style.opacity = "1";
+          sunIcon.style.opacity = "0";
+        } else {
+          body.classList.add("dark-theme");
+          body.classList.remove("light-theme");
+          moonIcon.style.opacity = "0";
+          sunIcon.style.opacity = "1";
+        }
+      }
+
+      function toggleTheme() {
+        const newTheme = body.classList.contains("light-theme")
+          ? "dark"
+          : "light";
+        localStorage.setItem("theme", newTheme);
+        setTheme(newTheme);
+      }
+
+      themeToggle.addEventListener("click", toggleTheme);
+
+      async function fetchProducts() {
+        const response = await fetch("/api/products");
+        const products = await response.json();
+
+        const tbody = document.querySelector("#products-table tbody");
+        tbody.innerHTML = products
+          .map(
+            (product) => `
+          <tr>
+            <td>${product.name}</td>
+            <td>${product.category}</td>
+            <td>${product.price}</td>
+            <td>${product.stock_quantity}</td>
+            <td>${product.supplier_name}</td>
+            <td>${formatDate(product.last_restocked_date)}</td>
+          </tr>
+      `
+          )
+          .join("");
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function logout() {
+        fetch("/logout", { method: "GET" }).then(() => {
+          window.location.href = "/login.html";
+        });
+      }
+
+      function back() {
+        fetch("/back", { method: "GET" }).then(() => {
+          window.location.href = "/main.html";
+        });
+      }
+
+      fetchProducts();
+    </script>
   </body>
 </html>

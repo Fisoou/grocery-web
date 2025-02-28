@@ -81,6 +81,86 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+app.post("/api/products", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  const {
+    name,
+    category,
+    price,
+    stock_quantity,
+    supplier_name,
+    last_restocked_date,
+  } = req.body;
+
+  try {
+    // Check if the product already exists
+    const checkProductQuery = `
+      SELECT * FROM products WHERE name = $1;
+    `;
+    const { rows } = await pool.query(checkProductQuery, [name]);
+
+    if (rows.length > 0) {
+      return res
+        .status(400)
+        .json({ message: "Продукт с таким названием уже существует" });
+    }
+
+    // Insert the new product into the products table
+    const insertProductQuery = `
+      INSERT INTO products (name, category, price, stock_quantity, supplier_id, last_restocked_date)
+      VALUES ($1, $2, $3, $4, (SELECT supplier_id FROM suppliers WHERE name = $5), $6);
+    `;
+    await pool.query(insertProductQuery, [
+      name,
+      category,
+      price,
+      stock_quantity,
+      supplier_name,
+      last_restocked_date,
+    ]);
+
+    res.status(201).json({ message: "Продукт добавлен" });
+  } catch (error) {
+    console.error("Error adding product:", error);
+    res.status(500).json({ message: "Ошибка сервера при добавлении продукта" });
+  }
+});
+
+// DELETE product based on product name
+app.delete("/api/products/delete", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Вы не авторизованы");
+  }
+
+  const { name } = req.body;
+
+  try {
+    // Check if the product exists before attempting to delete it
+    const checkProductQuery = `
+      SELECT * FROM products WHERE name = $1;
+    `;
+    const { rows } = await pool.query(checkProductQuery, [name]);
+
+    if (rows.length === 0) {
+      return res.status(400).json({ message: "Продукт не найден" });
+    }
+
+    // Delete the product from the database
+    const deleteProductQuery = `
+      DELETE FROM products WHERE name = $1;
+    `;
+    await pool.query(deleteProductQuery, [name]);
+
+    res.status(200).json({ message: "Продукт удален" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Ошибка сервера при удалении продукта" });
+  }
+});
+
 app.get("/api/sales", async (req, res) => {
   if (!req.session.user) {
     return res.status(401).send("Вы не авторизованы");
@@ -152,5 +232,5 @@ app.get("/api/employees", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Сервер запущен на: http://localhost:${port}`);
+  console.log(`Сервер запущен на: http://localhost:${port}/login.html`);
 });
